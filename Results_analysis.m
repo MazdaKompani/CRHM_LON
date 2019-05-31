@@ -1,5 +1,4 @@
-
-close all
+%close all
 clear all
 
 
@@ -23,29 +22,33 @@ GWL = timeseries(GWLdata.data(:,2),time_GWL);
 
 % load CRHM results
 
-model_tests = {'initial (Mazda)','CRHM_output_1.txt';...
+model_tests_all = {'Lattest update','CRHM_output_1.txt';...
                 'initial (Mazda) + parametersUpdated','CRHM_output_2.txt';...;
                 'initial (Mazda) + removed macro','CRHM_output_3.txt';...
                 'initial (Mazda) + removed macro + parameters updated','CRHM_output_4.txt';...
                 'Old model -> new tillage module','CRHM_output.txt'};
 
+model_tests_2plot = [1];
+
+model_tests = model_tests_all(model_tests_2plot,:);
+            
 crhm_col_QSurf = 6; % col including time
 crhm_col_QSTile = 8;% % col including time
 crhm_col_GWL = 2; %% col including time
 
 % Plot results
-for i=1:5
+for i=1:numel(model_tests(:,1))
    figure('name',['Model ',num2str(i)])
    h1 = axes;
     plot(QSurf,'ro')
     hold on
     
-    CRHMdata_model_1 = importdata(model_tests{i,2}); % initial (Mazda)
+    CRHMdata_model = importdata(model_tests{i,2}); % initial (Mazda)
     
-    time_chrm = datenum(CRHMdata_model_1.data(:,1) + 693960);
-    QSurf_crhm_i = timeseries(CRHMdata_model_1.data(:,crhm_col_QSurf),time_chrm);
+    time_chrm = datenum(CRHMdata_model.data(:,1) + 693960);
+    QSurf_crhm_i = timeseries(CRHMdata_model.data(:,crhm_col_QSurf),time_chrm);
     %QTile_crhm_1 = timeseries(RHMdata_initial_1.data(:,crhm_col_QSTile),time_chrm);
-    GWL_crhm_i = timeseries(CRHMdata_model_1.data(:,crhm_col_GWL),time_chrm);
+    GWL_crhm_i = timeseries(CRHMdata_model.data(:,crhm_col_GWL),time_chrm);
   
     plot(QSurf_crhm_i,'k')
     ax1 = gcf;
