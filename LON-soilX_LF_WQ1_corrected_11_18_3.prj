@@ -1,5 +1,5 @@
 Description - to be added
-###### Version: CRHM 01/28/19  Creation: 31/05/2019 16:41
+###### Version: CRHM 01/28/19  Creation: 31/05/2019 16:47
 Dimensions:
 ######
 nhru 1
@@ -63,12 +63,15 @@ Macros:
 ######
 Observations:
 ######
-LON2011-2018-wholepart1.obs
+Z:\media\DATADRIVE1\MegaSync\2_CRHM_WQ\1_Model\PROJECTS\Mazda\LON2011-2018-V3-1-climate.obs
+Z:\media\DATADRIVE1\MegaSync\2_CRHM_WQ\1_Model\PROJECTS\Mazda\LON2011-2018-V3-1-GWL.obs
+Z:\media\DATADRIVE1\MegaSync\2_CRHM_WQ\1_Model\PROJECTS\Mazda\LON2011-2018-V3-1-Qsurf.obs
+Z:\media\DATADRIVE1\MegaSync\2_CRHM_WQ\1_Model\PROJECTS\Mazda\LON2011-2018-V3-1-Qtile.obs
 ######
 Dates:
 ######
 2011 10 3
-2018 9 28
+2018 9 29
 ######
 Modules:
 ######
@@ -98,7 +101,7 @@ Shared Atmos_mWQ <0 to 10>
 0 
 0 
 Shared basin_area <1E-6 to 1E9>
-3 
+1 
 Shared calcC <0 to 1>
 1 
 Shared calcN <0 to 1>
@@ -144,9 +147,9 @@ basin hru_names
 basin INIT_STATE
 '' 
 basin Loop_to
-' ' ' ' 
+'' '' 
 basin RapidAdvance_to
-' ' 
+'' 
 basin RUN_END <0 to 1E5>
 0 
 basin RUN_ID <-1E8 to 1E8>
@@ -553,7 +556,7 @@ TChart:
 The Cold Regions Hydrological Model Platform September 2015
  
  
-(mm/int)
+(mm)
  
  
  
