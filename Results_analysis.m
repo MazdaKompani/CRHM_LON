@@ -22,7 +22,7 @@ GWL = timeseries(GWLdata.data(:,2),time_GWL);
 
 % load CRHM results
 
-model_tests_all = {'Lattest update','CRHM_output_1.txt';...
+model_tests_all = {'Lattest version','CRHM_output_1.txt';...
                 'initial (Mazda) + parametersUpdated','CRHM_output_2.txt';...;
                 'initial (Mazda) + removed macro','CRHM_output_3.txt';...
                 'initial (Mazda) + removed macro + parameters updated','CRHM_output_4.txt';...
@@ -95,6 +95,8 @@ for i=1:numel(model_tests(:,1))
      dim = [.2 .5 .3 .3];
      annotation('textbox',dim,'String',PerfText,'FitBoxToText','on','backgroundColor','w');
     
+     saveas(gcf,['Results_runoff_',model_tests{i,1}],'png')
+     
 end
 
 %legend('Obs','Model_1','Model_2','Model_3')
