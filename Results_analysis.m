@@ -1,6 +1,3 @@
-%close all
-clear all
-
 
 % load observations
 climatedata = importdata('LON2011-2018-V3-1-climate.obs');
