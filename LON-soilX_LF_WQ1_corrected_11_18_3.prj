@@ -1,5 +1,5 @@
 Description - to be added
-###### Version: CRHM 01/28/19  Creation: 31/05/2019 17:13
+###### Version: CRHM 01/28/19  Creation: 6/4/2019 14:45
 Dimensions:
 ######
 nhru 1
@@ -11,10 +11,10 @@ Macros:
 ######
 Observations:
 ######
-Z:\media\DATADRIVE1\MegaSync\2_CRHM_WQ\1_Model\PROJECTS\Mazda\LON2011-2018-V3-1-climate.obs
-Z:\media\DATADRIVE1\MegaSync\2_CRHM_WQ\1_Model\PROJECTS\Mazda\LON2011-2018-V3-1-GWL.obs
-Z:\media\DATADRIVE1\MegaSync\2_CRHM_WQ\1_Model\PROJECTS\Mazda\LON2011-2018-V3-1-Qsurf.obs
-Z:\media\DATADRIVE1\MegaSync\2_CRHM_WQ\1_Model\PROJECTS\Mazda\LON2011-2018-V3-1-Qtile.obs
+LON2011-2018-V3-1-climate.obs
+LON2011-2018-V3-1-GWL.obs
+LON2011-2018-V3-1-Qsurf.obs
+LON2011-2018-V3-1-Qtile.obs
 ######
 Dates:
 ######
@@ -499,7 +499,7 @@ The Cold Regions Hydrological Model Platform 2014
  
 Z:\media\DATADRIVE1\MegaSync\2_CRHM_WQ\1_Model\PROJECTS\Mazda\LON-soilX_LF_WQ1_corrected_11_18_3.prj
  
-(mm/int)
+(mm)
  
  
  
