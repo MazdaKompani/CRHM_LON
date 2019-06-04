@@ -8,6 +8,58 @@ nobs 1
 ######
 Macros:
 ######
+'Soil_Moisture_Change'
+'declputvar, *, soil_moist, (mm)'
+'declputvar, *, soil_rechr, (mm)'
+'declputvar, *, runoff, (mm/int)'
+'//each kg/m2 equal to 1 mm'
+'declputvar, *, snowmelt_int, (kg/m^2*int)'
+'declputvar, *, gw, (mm)'
+'declgetparam, *, soil_gw_K, (mm/d)'
+'//declgetparam, *, lower_ssr_K, (mm/d)'
+'declreadobs, QSurf,61252,"Observed_surface_flow", (mm/int)'
+'declreadobs, QTile,61252,"Observed_surface_flow", (mm/int)'
+'declputvar, *, soil_runoff, (mm/int)'
+'declvar,tile_flow,NHRU,"flow_from_tile", (mm/int)'
+'//declvar,tile_flow_max,NHRU,"Maximum_flow_from_tile", (mm/int)'
+'declvar,soil_WL,NHRU,"soil_water_level", (m)'
+'declvar,Ksatu,NHRU,"soil_sat_hydrocond", (mm/int)'
+'declvar,Poro_soil,NHRU,"soil_porosity", (1)'
+'declvar,Dimpbt,NHRU,"depth_of_impermeable_layer_below_tile", (mm)'
+'declvar,tilspc,NHRU,"tile_spacing", (mm)'
+'declvar,total_flow_obs,NHRU,"sum_of_surface_and_tile_flow_observed", (mm/int)'
+'declvar,total_flow_sim,NHRU,"sum_of_surface_and_tile_flow_simulated", (mm/int)'
+'declvar,total_surflow_sim,NHRU,"sum_of_different_type_of_surface_flow_simulated", (mm/int)'
+'//declreadobs,tileflow,NOBS,"Obs_tile_flow",(mm)'
+'command'
+'//change the units of soil_gw_K from mm/d to Ksatu in mm/h'
+'//Ksatu=9.282'
+'Ksatu=soil_gw_K/24.0'
+'Poro_soil=0.01'
+'Dimpbt=500'
+'tilspc=14000'
+'//if the water level in soil is higher than the tile level'
+'if((soil_moist[hh]/Poro_soil)>Dimpbt)'
+'tile_flow[hh]=((8*Ksatu*Dimpbt*((soil_moist[hh]/Poro_soil)-Dimpbt)+4*Ksatu*((soil_moist[hh]/Poro_soil)-Dimpbt)^2)/(tilspc)^2)'
+'//tile maximum capacity is 0.12 so if the tile flow is higher than that we reduce it to 0.12'
+'if(tile_flow[hh]<0.45)'
+'soil_moist[hh]=soil_moist[hh]-tile_flow[hh]'
+'soil_rechr[hh]=soil_rechr[hh]-tile_flow[hh]'
+'else'
+'tile_flow[hh]=0.45'
+'soil_moist[hh]=soil_moist[hh]-tile_flow[hh]'
+'soil_rechr[hh]=soil_rechr[hh]-tile_flow[hh]'
+'endif'
+'endif'
+'soil_moist[hh]=soil_moist[hh]-0.0'
+'soil_rechr[hh]=soil_rechr[hh]-0.0'
+'//excess water flow out from the soil and add to groundwater''
+'gw[hh]=gw[hh]+(0.0)'
+'soil_WL[hh]=soil_moist[hh]/(Poro_soil*1000)'
+'total_flow_obs[hh]=QTile[hh]+QSurf[hh]'
+'total_flow_sim[hh]=soil_runoff[hh]+tile_flow[hh]'
+'total_surflow_sim[hh]=soil_runoff[hh]+runoff[hh]+snowmelt_int[hh]'
+'end'
 ######
 Observations:
 ######
@@ -36,6 +88,7 @@ evap CRHM 09/26/13
 SnobalCRHM#2 CRHM 11/21/16
 Ayers CRHM 01/11/17
 WQ_Hype CRHM 01/18/19
+Soil_Moisture_Change Macro 04/20/06
 WQ_Soil CRHM 01/15/19
 WQ_Netroute CRHM 11/29/18
 ######
