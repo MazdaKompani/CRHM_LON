@@ -1,5 +1,5 @@
 Description - to be added
-###### Version: CRHM 01/28/19  Creation: 6/4/2019 14:45
+###### Version: CRHM 01/28/19  Creation: 6/5/2019 15:57
 Dimensions:
 ######
 nhru 1
@@ -8,6 +8,25 @@ nobs 1
 ######
 Macros:
 ######
+'unit_adjustment'
+'declgetparam, *, hru_area, (km^2)'
+'//unit for basin flow'
+'declputvar, *, basinflow, (m^3/int)'
+'declvar,basinflow_m,NHRU,"basin_flow", (mm/int)'
+'basinflow_m[hh]=1000'
+'//basinflow_m[hh]=basinflow[hh]*1000/(hru_area*1000000)'
+'//unit for outflow'
+'declputvar, *, outflow, (mm*km^2/int)'
+'declvar,outflow_m,NHRU,"basin_outflow", (mm/int)'
+'outflow_m[hh]=outflow[hh]*1000*1000/(hru_area*1000000)'
+'//unit for runoutflow'
+'declputvar, *, runoutflow, (mm*km^2/int)'
+'declvar,runoutflow_m,NHRU,"basin_runoutflow", (mm/int)'
+'runoutflow_m[hh]=runoutflow[hh]*1000*1000/(hru_area*1000000)'
+'//unit for gwoutflow'
+'declputvar, *, gwoutflow, (mm*km^2/int)'
+'declvar,gwoutflow_m,NHRU,"basin_gwoutflow", (mm/int)'
+'gwoutflow_m[hh]=gwoutflow[hh]*1000*1000/(hru_area*1000000)'
 ######
 Observations:
 ######
@@ -26,6 +45,7 @@ Modules:
 basin CRHM 02/24/12
 global CRHM 04/19/13
 obs CRHM 04/17/18
+unit_adjustment Macro 04/20/06
 calcsun CRHM 10/01/13
 intcp CRHM 02/24/15
 longVt CRHM 02/10/16
@@ -56,11 +76,11 @@ Shared calcN <0 to 1>
 Shared calcP <0 to 1>
 0 
 Shared hru_area <1E-6 to 1E9>
-1 
+0.081 
 Shared hru_ASL <0 to 360>
 0 
 Shared hru_elev <0 to 1E5>
-637 
+294 
 Shared hru_GSL <0 to 90>
 0 
 Shared hru_lat <-90 to 90>
@@ -132,7 +152,7 @@ obs ClimChng_t <-50 to 50>
 obs ElevChng_flag <0 to 1>
 0 
 obs hru_elev <0 to 1E5>
-0 
+294 
 obs HRU_OBS <1 to 100>
 1 
 2 
@@ -486,9 +506,20 @@ WQ_Soil soil_ssr 1
 WQ_Soil Sd 1
 WQ_Soil soil_runoff 1
 SnobalCRHM SWE 1
+evap hru_actet 1
+evap hru_evap 1
+SnobalCRHM snowmelt_int 1
+Ayers runoff 1
+Ayers infil 1
+Ayers meltrunoff 1
+WQ_Netroute basinflow 1
+WQ_Netroute outflow 1
+WQ_Netroute runoutflow 1
+WQ_Netroute gwoutflow 1
 ######
 Display_Observation:
 ######
+obs p 1 _obs
 obs QSurf 1 _obs
 ######
 Log_All
@@ -499,7 +530,7 @@ The Cold Regions Hydrological Model Platform 2014
  
 Z:\media\DATADRIVE1\MegaSync\2_CRHM_WQ\1_Model\PROJECTS\Mazda\LON-soilX_LF_WQ1_corrected_11_18_3.prj
  
-(mm)
+(mm/int)
  
  
  
