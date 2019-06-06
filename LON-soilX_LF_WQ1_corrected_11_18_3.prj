@@ -1,5 +1,5 @@
 Description - to be added
-###### Version: CRHM 01/28/19  Creation: 6/5/2019 15:57
+###### Version: CRHM 01/28/19  Creation: 6/6/2019 16:17
 Dimensions:
 ######
 nhru 1
@@ -8,25 +8,26 @@ nobs 1
 ######
 Macros:
 ######
-'unit_adjustment'
+'Unit_Adjustment'
 'declgetparam, *, hru_area, (km^2)'
 '//unit for basin flow'
 'declputvar, *, basinflow, (m^3/int)'
 'declvar,basinflow_m,NHRU,"basin_flow", (mm/int)'
-'basinflow_m[hh]=1000'
-'//basinflow_m[hh]=basinflow[hh]*1000/(hru_area*1000000)'
 '//unit for outflow'
 'declputvar, *, outflow, (mm*km^2/int)'
 'declvar,outflow_m,NHRU,"basin_outflow", (mm/int)'
-'outflow_m[hh]=outflow[hh]*1000*1000/(hru_area*1000000)'
 '//unit for runoutflow'
 'declputvar, *, runoutflow, (mm*km^2/int)'
 'declvar,runoutflow_m,NHRU,"basin_runoutflow", (mm/int)'
-'runoutflow_m[hh]=runoutflow[hh]*1000*1000/(hru_area*1000000)'
 '//unit for gwoutflow'
 'declputvar, *, gwoutflow, (mm*km^2/int)'
 'declvar,gwoutflow_m,NHRU,"basin_gwoutflow", (mm/int)'
+'command'
+'basinflow_m[hh]=basinflow[hh]*1000/(hru_area*1000000)'
+'outflow_m[hh]=outflow[hh]*1000*1000/(hru_area*1000000)'
+'runoutflow_m[hh]=runoutflow[hh]*1000*1000/(hru_area*1000000)'
 'gwoutflow_m[hh]=gwoutflow[hh]*1000*1000/(hru_area*1000000)'
+'end'
 ######
 Observations:
 ######
@@ -44,8 +45,8 @@ Modules:
 ######
 basin CRHM 02/24/12
 global CRHM 04/19/13
+Unit_Adjustment Macro 04/20/06
 obs CRHM 04/17/18
-unit_adjustment Macro 04/20/06
 calcsun CRHM 10/01/13
 intcp CRHM 02/24/15
 longVt CRHM 02/10/16
@@ -68,7 +69,7 @@ Shared Atmos_mWQ <0 to 10>
 0 
 0 
 Shared basin_area <1E-6 to 1E9>
-1 
+0.081 
 Shared calcC <0 to 1>
 0 
 Shared calcN <0 to 1>
@@ -96,7 +97,7 @@ Shared rain_conc <0 to 1000>
 0 
 0 
 Shared Sdmax <0 to 1000>
-0 
+15 
 Shared soil_rechr_max <0 to 350>
 60 
 albedo Albedo_bare <0 to 1>
@@ -128,11 +129,11 @@ basin StateVars_to_Update
 basin TraceVars
 ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 
 evap evap_type <0 to 2>
-0 
+2 
 evap F_Qg <0 to 1>
 0.1 
 evap rs <0 to 0.01>
-0 
+0.0006 
 evap Zwind <0.01 to 100>
 10 
 global Time_Offset <-12 to 12>
@@ -151,8 +152,6 @@ obs ClimChng_t <-50 to 50>
 0 
 obs ElevChng_flag <0 to 1>
 0 
-obs hru_elev <0 to 1E5>
-294 
 obs HRU_OBS <1 to 100>
 1 
 2 
@@ -516,6 +515,10 @@ WQ_Netroute basinflow 1
 WQ_Netroute outflow 1
 WQ_Netroute runoutflow 1
 WQ_Netroute gwoutflow 1
+Unit_Adjustment basinflow_m 1
+Unit_Adjustment gwoutflow_m 1
+Unit_Adjustment outflow_m 1
+Unit_Adjustment runoutflow_m 1
 ######
 Display_Observation:
 ######
@@ -530,7 +533,7 @@ The Cold Regions Hydrological Model Platform 2014
  
 Z:\media\DATADRIVE1\MegaSync\2_CRHM_WQ\1_Model\PROJECTS\Mazda\LON-soilX_LF_WQ1_corrected_11_18_3.prj
  
-(mm/int)
+(mm)
  
  
  

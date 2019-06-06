@@ -29,7 +29,7 @@ model_tests_2plot = [1];
 
 model_tests = model_tests_all(model_tests_2plot,:);
             
-crhm_col_QSurf = 11; % col including time
+crhm_col_QSurf = 21; % col including time
 crhm_col_QSTile = 8;% % col including time
 crhm_col_GWL = 2; %% col including time
 
@@ -59,7 +59,7 @@ for i=1:numel(model_tests(:,1))
     datetick('x','mmm-yyyy','keeplimits','keepticks')
     
     legend('Obs (runoff, left axis, mm/h)',...
-    ['Model_',num2str(i), 'runoff, left axis],mm/h)'])
+    ['Model_',num2str(i), 'runoutflow-m, left axis],mm/h)'])
     
     % plot precip
     h2 = axes;
