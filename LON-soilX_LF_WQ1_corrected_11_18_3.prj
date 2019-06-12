@@ -1,5 +1,5 @@
 Description - to be added
-###### Version: CRHM 01/28/19  Creation: 6/6/2019 16:17
+###### Version: CRHM 01/28/19  Creation: 6/9/2019 21:19
 Dimensions:
 ######
 nhru 1
@@ -22,11 +22,23 @@ Macros:
 '//unit for gwoutflow'
 'declputvar, *, gwoutflow, (mm*km^2/int)'
 'declvar,gwoutflow_m,NHRU,"basin_gwoutflow", (mm/int)'
+'//Sdexcess is the excess surface outflow from surface depression storage'
+'declvar,Sdexcess,NHRU,"surface_depression_excess_surfaceoutflow", (mm/int)'
+'declvar,Sdex,NHRU,"surface_depression_excess_waterlevel", (mm)'
+'declputvar, *, Sd, (mm)'
 'command'
 'basinflow_m[hh]=basinflow[hh]*1000/(hru_area*1000000)'
 'outflow_m[hh]=outflow[hh]*1000*1000/(hru_area*1000000)'
 'runoutflow_m[hh]=runoutflow[hh]*1000*1000/(hru_area*1000000)'
 'gwoutflow_m[hh]=gwoutflow[hh]*1000*1000/(hru_area*1000000)'
+'if(Sd[hh]*1>14.5)'
+'Sdexcess[hh]=((Sd[hh]*1-14.5)*0.001)^(3/2)*1.704*5*3600*1000/(hru_area*1000000)'
+'Sdex[hh]=Sd[hh]*1-14.5'
+'else'
+'Sdexcess[hh]=0.0'
+'Sdex[hh]=0.0'
+'endif'
+'Sd[hh]=Sd[hh]-Sdexcess[hh]'
 'end'
 ######
 Observations:
@@ -97,7 +109,7 @@ Shared rain_conc <0 to 1000>
 0 
 0 
 Shared Sdmax <0 to 1000>
-15 
+150 
 Shared soil_rechr_max <0 to 350>
 60 
 albedo Albedo_bare <0 to 1>
@@ -519,6 +531,8 @@ Unit_Adjustment basinflow_m 1
 Unit_Adjustment gwoutflow_m 1
 Unit_Adjustment outflow_m 1
 Unit_Adjustment runoutflow_m 1
+Unit_Adjustment Sdexcess 1
+Unit_Adjustment Sdex 1
 ######
 Display_Observation:
 ######

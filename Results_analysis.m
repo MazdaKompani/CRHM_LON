@@ -37,7 +37,7 @@ crhm_col_GWL = 2; %% col including time
 for i=1:numel(model_tests(:,1))
    figure('name',['Model ',num2str(i)])
    h1 = axes;
-    plot(QSurf,'ro')
+    plot(QSurf,'ro','Markersize',2)
     hold on
     
     CRHMdata_model = importdata(model_tests{i,2}); % initial (Mazda)
