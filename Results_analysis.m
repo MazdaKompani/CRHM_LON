@@ -1,4 +1,6 @@
-
+%In lines 32 and 62 we can change the column number and the name of the
+%simulated varaible
+% in Line     we can change the onbserved value
 % load observations
 climatedata = importdata('LON2011-2018-V3-1-climate.obs');
 time = datenum(climatedata.data(:,1) + 693960);
