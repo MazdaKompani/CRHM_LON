@@ -1,5 +1,5 @@
 Description - to be added
-###### Version: CRHM 01/28/19  Creation: 6/28/2019 11:10
+###### Version: CRHM 01/28/19  Creation: 7/5/2019 11:10
 Dimensions:
 ######
 nhru 1
@@ -9,30 +9,6 @@ nobs 1
 Macros:
 ######
 'Unit_Adjustment'
-'//declaration for tile module'
-'declputvar, *, soil_moist, (mm)'
-'declputvar, *, soil_rechr, (mm)'
-'declputvar, *, runoff, (mm/int)'
-'//each kg/m2 equal to 1 mm'
-'declputvar, *, snowmelt_int, (kg/m^2*int)'
-'declputvar, *, gw, (mm)'
-'declgetparam, *, soil_gw_K, (mm/d)'
-'//declgetparam, *, lower_ssr_K, (mm/d)'
-'declreadobs, QSurf,61252,"Observed_surface_flow", (mm/int)'
-'declreadobs, QTile,61252,"Observed_surface_flow", (mm/int)'
-'declputvar, *, soil_runoff, (mm/int)'
-'declvar,tile_flow,NHRU,"flow_from_tile", (mm/int)'
-'//declvar,tile_flow_max,NHRU,"Maximum_flow_from_tile", (mm/int)'
-'declvar,soil_WL,NHRU,"soil_water_level", (m)'
-'declvar,Ksatu,NHRU,"soil_sat_hydrocond", (mm/int)'
-'declvar,Poro_soil,NHRU,"soil_porosity", (1)'
-'declvar,Dimpbt,NHRU,"depth_of_impermeable_layer_below_tile", (mm)'
-'declvar,tilspc,NHRU,"tile_spacing", (mm)'
-'declvar,total_flow_obs,NHRU,"sum_of_surface_and_tile_flow_observed", (mm/int)'
-'declvar,total_flow_sim,NHRU,"sum_of_surface_and_tile_flow_simulated", (mm/int)'
-'declvar,total_surflow_sim,NHRU,"sum_of_different_type_of_surface_flow_simulated", (mm/int)'
-'//declreadobs,tileflow,NOBS,"Obs_tile_flow",(mm)'
-'//end of declaration for tile module'
 'declgetparam, *, hru_area, (km^2)'
 '//unit for basin flow'
 'declputvar, *, basinflow, (m^3/int)'
@@ -55,45 +31,14 @@ Macros:
 'outflow_m[hh]=outflow[hh]*1000*1000/(hru_area*1000000)'
 'runoutflow_m[hh]=runoutflow[hh]*1000*1000/(hru_area*1000000)'
 'gwoutflow_m[hh]=gwoutflow[hh]*1000*1000/(hru_area*1000000)'
-'if(Sd[hh]*1>14.5)'
-'Sdexcess[hh]=((Sd[hh]*1-14.5)*0.001)^(3/2)*1.704*5*3600*1000/(hru_area*1000000)'
-'Sdex[hh]=Sd[hh]*1-14.5'
-'else'
-'Sdexcess[hh]=0.0'
-'Sdex[hh]=0.0'
-'endif'
-'Sd[hh]=Sd[hh]-Sdexcess[hh]'
-'//declaration for tile command'
-'//change the units of soil_gw_K from mm/d to Ksatu in mm/h'
-'Ksatu=2.0'
-'//Ksatu=soil_gw_K/24.0'
-'Poro_soil=0.01'
-'Dimpbt=500'
-'tilspc=14000'
-'//if the water level in soil is higher than the tile level'
-'if((soil_moist[hh]/Poro_soil)>Dimpbt)'
-'tile_flow[hh]=((8*Ksatu*Dimpbt*((soil_moist[hh]/Poro_soil)-Dimpbt)+4*Ksatu*((soil_moist[hh]/Poro_soil)-Dimpbt)^2)/(tilspc)^2)'
-'//tile maximum capacity is 0.12 so if the tile flow is higher than that we reduce it to 0.12'
-'if(tile_flow[hh]<0.45)'
-'soil_moist[hh]=soil_moist[hh]-tile_flow[hh]'
-'soil_rechr[hh]=soil_rechr[hh]-tile_flow[hh]'
-'else'
-'tile_flow[hh]=0.45'
-'soil_moist[hh]=soil_moist[hh]-tile_flow[hh]'
-'soil_rechr[hh]=soil_rechr[hh]-tile_flow[hh]'
-'endif'
-'endif'
-'soil_moist[hh]=soil_moist[hh]-0.0'
-'soil_rechr[hh]=soil_rechr[hh]-0.0'
-'//excess water flow out from the soil and add to groundwater''
-'gw[hh]=gw[hh]+(0.0)'
-'soil_WL[hh]=soil_moist[hh]/(Poro_soil*1000)'
-'if(QTile[hh]>0 && QSurf[hh]>0)'
-'//total_flow_obs[hh]=QTile[hh]+QSurf[hh]'
-'endif'
-'total_flow_sim[hh]=soil_runoff[hh]+tile_flow[hh]'
-'total_surflow_sim[hh]=soil_runoff[hh]+runoff[hh]+snowmelt_int[hh]'
-'//end of declaration for tile command'
+'/////if(Sd[hh]*1>14.5)'
+'/////Sdexcess[hh]=((Sd[hh]*1-14.5)*0.001)^(3/2)*1.704*5*3600*1000/(hru_area*1000000)'
+'/////Sdex[hh]=Sd[hh]*1-14.5'
+'/////else'
+'/////Sdexcess[hh]=0.0'
+'/////Sdex[hh]=0.0'
+'/////endif'
+'/////Sd[hh]=Sd[hh]-Sdexcess[hh]'
 'end'
 ######
 Observations:
@@ -112,8 +57,8 @@ Modules:
 ######
 basin CRHM 02/24/12
 global CRHM 04/19/13
-Unit_Adjustment Macro 04/20/06
 obs CRHM 04/17/18
+Unit_Adjustment Macro 04/20/06
 calcsun CRHM 10/01/13
 intcp CRHM 02/24/15
 longVt CRHM 02/10/16
@@ -152,7 +97,7 @@ Shared hru_elev <0 to 1E5>
 Shared hru_GSL <0 to 90>
 0 
 Shared hru_lat <-90 to 90>
-51.32 
+43.64 
 Shared Ht <0.001 to 100>
 0.1 
 Shared inhibit_evap <0 to 1>
@@ -164,9 +109,9 @@ Shared rain_conc <0 to 1000>
 0 
 0 
 Shared Sdmax <0 to 1000>
-150 
+10 
 Shared soil_rechr_max <0 to 350>
-60 
+62.13 
 albedo Albedo_bare <0 to 1>
 0.17 
 albedo Albedo_snow <0 to 1>
@@ -182,7 +127,7 @@ basin hru_names
 basin INIT_STATE
 '' 
 basin Loop_to
-'' '' 
+'' 
 basin RapidAdvance_to
 '' 
 basin RUN_END <0 to 1E5>
@@ -192,17 +137,17 @@ basin RUN_ID <-1E8 to 1E8>
 basin RUN_START <0 to 1E5>
 0 
 basin StateVars_to_Update
-' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 
+' ' 
 basin TraceVars
-' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 
+' ' 
 evap evap_type <0 to 2>
-1 
+2 
 evap F_Qg <0 to 1>
 0.1 
 evap rs <0 to 0.01>
-0.01 
+0.0006 
 evap Zwind <0.01 to 100>
-10 
+3 
 global Time_Offset <-12 to 12>
 0 
 longVt epsilon_s <0 to 1>
@@ -321,13 +266,13 @@ WQ_Hype fertdown1 <0 to 1>
 WQ_Hype fertdown2 <0 to 1>
 0 
 WQ_Hype fertNamount1 <0 to 1E6>
-3.014E-6 
+1 
 WQ_Hype fertNamount2 <0 to 1E6>
-3.014E-6 
+1 
 WQ_Hype fertPamount1 <0 to 1E6>
-3.014E-6 
+1 
 WQ_Hype fertPamount2 <0 to 1E6>
-3.014E-6 
+1 
 WQ_Hype fertperiod <1 to 100>
 1 
 WQ_Hype gcmax1 <0 to 10>
@@ -537,7 +482,7 @@ WQ_Soil soil_gw_K <0 to 100>
 WQ_Soil soil_moist_init <0 to 5000>
 187 
 WQ_Soil soil_moist_max <0 to 5000>
-375 
+394 
 WQ_Soil soil_rechr_init <0 to 250>
 30 
 WQ_Soil soil_ssr_runoff <0 to 1>
@@ -566,47 +511,35 @@ MS_time
 ######
 Display_Variable:
 ######
+evap hru_evap 1
+WQ_Soil soil_runoff 1
 WQ_Soil soil_moist 1
 WQ_Soil soil_rechr 1
-WQ_Soil soil_ssr 1
-WQ_Soil Sd 1
-WQ_Soil soil_runoff 1
-SnobalCRHM SWE 1
-evap hru_actet 1
-evap hru_evap 1
-SnobalCRHM snowmelt_int 1
 Ayers runoff 1
-Ayers infil 1
 Ayers meltrunoff 1
-WQ_Netroute basinflow 1
-WQ_Netroute outflow 1
-WQ_Netroute runoutflow 1
-WQ_Netroute gwoutflow 1
+Ayers infil 1
+evap hru_actet 1
+Unit_Adjustment Sdex 1
+Unit_Adjustment Sdexcess 1
 Unit_Adjustment basinflow_m 1
 Unit_Adjustment gwoutflow_m 1
 Unit_Adjustment outflow_m 1
 Unit_Adjustment runoutflow_m 1
-Unit_Adjustment Sdexcess 1
-Unit_Adjustment Sdex 1
-Unit_Adjustment soil_WL 1
-Unit_Adjustment tile_flow 1
 ######
 Display_Observation:
 ######
 obs GWL 1 _obs
 obs p 1 _obs
 obs QSurf 1 _obs
-obs QTile 1 _obs
-######
-Log_All
+obs t 1 _obs
 ######
 TChart:
 ######
 The Cold Regions Hydrological Model Platform 2014
  
-Z:\media\DATADRIVE1\MegaSync\2_CRHM_WQ\1_Model\PROJECTS\Mazda\LON-soilX_LF_WQ1_corrected_11_18_3.prj
+C:\Users\mkompani\Desktop\GWF-2019\Version3-2_DC\CRHM_LON\LON-soilX_LF_WQ1_corrected_11_18_3.prj
  
-(mm)
+(mm/int)
  
  
  
