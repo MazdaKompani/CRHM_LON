@@ -1,3 +1,6 @@
+
+% INPUT DATA -----------------------------------
+
 %In lines 32 and 62 we can change the column number and the name of the
 %simulated varaible
 % in Line     we can change the onbserved value
@@ -19,6 +22,8 @@ GWLdata = importdata('LON2011-2018-V3-1-GWL.obs');
 time_GWL = datenum(GWLdata.data(:,1) + 693960);
 GWL = timeseries(GWLdata.data(:,2),time_GWL);
 
+porosity = 0.15;
+
 % load CRHM results
 
 %model_tests_all = {'Lattest version','CRHM_output_1.txt';...
@@ -35,7 +40,9 @@ model_tests = model_tests_all(model_tests_2plot,:);
             
 crhm_col_QSurf = 3; % col including time
 crhm_col_QSTile = 8;% % col including time
-crhm_col_GWL = 2; %% col including time
+crhm_col_GWL = 4; %% col including time
+
+% -------------------------------------------------------------
 
 % Plot results
 for i=1:numel(model_tests(:,1))
@@ -128,11 +135,12 @@ end
 % %title('Tile flow (mm/h)')
 % %legend('Obs','Model_1','Model_2','Model_3')
 % 
-% figure
-% %subplot(311)
-% plot(GWL,'r.')
-% hold on
-% plot(GWL_crhm_1,'k')
+figure
+%subplot(311)
+plot(GWL,'r.')
+hold on
+GWL_crhm_i_conv_to_m = GWL_crhm_i / porosity / 1000 - 1.5; % well checked and correct (Mazda and Diogo)
+plot(GWL_crhm_i_conv_to_m,'k')
 % hold on
 % plot(GWL_crhm_2,'g:')
 % hold on
