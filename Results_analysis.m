@@ -21,17 +21,19 @@ GWL = timeseries(GWLdata.data(:,2),time_GWL);
 
 % load CRHM results
 
-model_tests_all = {'Lattest version','CRHM_output_1.txt';...
-                'initial (Mazda) + parametersUpdated','CRHM_output_2.txt';...;
-                'initial (Mazda) + removed macro','CRHM_output_3.txt';...
-                'initial (Mazda) + removed macro + parameters updated','CRHM_output_4.txt';...
-                'Old model -> new tillage module','CRHM_output.txt'};
-
+%model_tests_all = {'Lattest version','CRHM_output_1.txt';...
+%                'initial (Mazda) + parametersUpdated','CRHM_output_2.txt';...;
+%                'initial (Mazda) + removed macro','CRHM_output_3.txt';...
+%                'initial (Mazda) + removed macro + parameters updated','CRHM_output_4.txt';...
+%                'Old model -> new tillage module','CRHM_output.txt'};
+            
+model_tests_all = {'Lattest version','CRHM_output_1.txt'};
+            
 model_tests_2plot = [1];
 
 model_tests = model_tests_all(model_tests_2plot,:);
             
-crhm_col_QSurf = 21; % col including time
+crhm_col_QSurf = 3; % col including time
 crhm_col_QSTile = 8;% % col including time
 crhm_col_GWL = 2; %% col including time
 
@@ -85,7 +87,7 @@ for i=1:numel(model_tests(:,1))
     title ({['EOF runoff - Model ',num2str(i)],model_tests{i,1}})
     
     % Performence calculation
-     [Nash,RMSE,Bias] = PerformenceCalculator(QSurf_crhm_i.Time,QSurf_crhm_i.Data,...
+     [Nash,RMSE,Bias,dataUse,CHRMout_data_interp] = PerformenceCalculator(QSurf_crhm_i.Time,QSurf_crhm_i.Data,...
          QSurf.Time,QSurf.Data);
      PerfText = {'Performence:',...
                 ['NSE =', num2str(Nash)],...
@@ -95,6 +97,10 @@ for i=1:numel(model_tests(:,1))
      annotation('textbox',dim,'String',PerfText,'FitBoxToText','on','backgroundColor','w');
     
      saveas(gcf,['Results_runoff_',model_tests{i,1}],'png')
+     
+     
+     figure;
+     scatter(dataUse,CHRMout_data_interp)
      
 end
 
@@ -146,7 +152,7 @@ end
 
 
 % Peformence Calculator (Nash, RMSE, Bias)
-function [Nash,RMSE,Bias] = PerformenceCalculator(CRHM_time,CRHMout_data_var,time,data)
+function [Nash,RMSE,Bias,dataUse,CHRMout_data_interp] = PerformenceCalculator(CRHM_time,CRHMout_data_var,time,data)
 
 CHRMout_data_interp = interp1(datenum(CRHM_time),CRHMout_data_var,datenum(time));
 % remove NaNs

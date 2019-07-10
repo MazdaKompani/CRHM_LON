@@ -22,21 +22,21 @@ GWL = timeseries(GWLdata.data(:,2),time_GWL);
 % load CRHM results
 
 model_tests_all = {'Lattest version','CRHM_output_1.txt';...
-                'initial (Mazda) + parametersUpdated','CRHM_output_2.txt';...;
-                'initial (Mazda) + removed macro','CRHM_output_3.txt';...
-                'initial (Mazda) + removed macro + parameters updated','CRHM_output_4.txt';...
-                'Old model -> new tillage module','CRHM_output.txt'};
+              %  'initial (Mazda) + parametersUpdated','CRHM_output_2.txt';...;
+              %  'initial (Mazda) + removed macro','CRHM_output_3.txt';...
+              %  'initial (Mazda) + removed macro + parameters updated','CRHM_output_4.txt';...
+              %  'Old model -> new tillage module','CRHM_output.txt'};
 
 model_tests_2plot = [1];
 
 model_tests = model_tests_all(model_tests_2plot,:);
             
-crhm_col_QSurf = 21; % col including time
+crhm_col_QSurf = 14; % col including time
 crhm_col_QSTile = 8;% % col including time
 crhm_col_GWL = 2; %% col including time
 
 % Plot  results
-%%%%%for i=1:numel(model_tests(:,1))
+for i=1:numel(model_tests(:,1))
    %%%%%figure('name',['Model ',num2str(i)])
    %%%%%h1 = axes;
  %%%%%   plot(QSurf,'ro','Markersize',2)
