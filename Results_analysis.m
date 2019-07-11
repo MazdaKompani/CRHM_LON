@@ -39,7 +39,7 @@ model_tests_2plot = [1];
 model_tests = model_tests_all(model_tests_2plot,:);
             
 crhm_col_QSurf = 3; % col including time
-crhm_col_QSTile = 8;% % col including time
+crhm_col_QSTile = 17;% % col including time
 crhm_col_GWL = 4; %% col including time
 
 % -------------------------------------------------------------
@@ -55,7 +55,7 @@ for i=1:numel(model_tests(:,1))
     
     time_chrm = datenum(CRHMdata_model.data(:,1) + 693960);
     QSurf_crhm_i = timeseries(CRHMdata_model.data(:,crhm_col_QSurf),time_chrm);
-    %QTile_crhm_1 = timeseries(RHMdata_initial_1.data(:,crhm_col_QSTile),time_chrm);
+    QTile_crhm_i = timeseries(CRHMdata_model.data(:,crhm_col_QSTile),time_chrm);
     GWL_crhm_i = timeseries(CRHMdata_model.data(:,crhm_col_GWL),time_chrm);
   
     plot(QSurf_crhm_i,'k')
@@ -113,14 +113,14 @@ end
 
 %legend('Obs','Model_1','Model_2','Model_3')
 
-% figure
-% plot(QTile,'ro')
+figure
+plot(QTile,'ro')
 % hold on
 % %plot(QSurf_crhm_1,'k')
 % hold on
 % %plot(QSurf_crhm_2,'g:')
 % hold on
-% plot(QTile_crhm_4,'k')
+plot(QTile_crhm_i,'k')
 % datetick('x','mmm-yyyy')
 % grid on
 % ylabel('[mm/h]')
