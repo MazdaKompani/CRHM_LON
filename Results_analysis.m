@@ -22,7 +22,7 @@ GWLdata = importdata('LON2011-2018-V3-1-GWL.obs');
 time_GWL = datenum(GWLdata.data(:,1) + 693960);
 GWL = timeseries(GWLdata.data(:,2),time_GWL);
 
-porosity = 0.15;
+porosity = 0.20;
 
 % load CRHM results
 
@@ -114,17 +114,17 @@ end
 %legend('Obs','Model_1','Model_2','Model_3')
 
 figure
-plot(QTile,'ro')
-% hold on
+plot(QTile.Time,QTile.Data,'ro')
+hold on
 % %plot(QSurf_crhm_1,'k')
 % hold on
 % %plot(QSurf_crhm_2,'g:')
 % hold on
 plot(QTile_crhm_i,'k')
-% datetick('x','mmm-yyyy')
-% grid on
-% ylabel('[mm/h]')
-% title('Tile flow (mm/h)')
+datetick('x','mmm-yyyy')
+grid on
+ylabel('[mm/h]')
+title('Tile flow (mm/h)')
 % legend('Obs',... %'Model_1','Model_2',.. 
 % 'Model_3')
 % 
@@ -139,16 +139,16 @@ figure
 %subplot(311)
 plot(GWL,'r.')
 hold on
-GWL_crhm_i_conv_to_m = GWL_crhm_i / porosity / 1000 - 1.5; % well checked and correct (Mazda and Diogo)
+GWL_crhm_i_conv_to_m = GWL_crhm_i / porosity / 1000 - (2.25-1.5); % well checked and correct (Mazda and Diogo)
 plot(GWL_crhm_i_conv_to_m,'k')
-% hold on
+%hold on
 % plot(GWL_crhm_2,'g:')
 % hold on
 % plot(GWL_crhm_3,'r:')
-% datetick('x','mmm-yyyy')
-% grid on
-% ylabel('[m]')
-% title('GW level (m)')
+datetick('x','mmm-yyyy')
+grid on
+ylabel('[m]')
+title('GW level (m)')
 % legend('Obs','Model_1','Model_2','Model_3')
 % 
 % plot(GWL,'r.')
