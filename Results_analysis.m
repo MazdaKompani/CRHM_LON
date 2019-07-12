@@ -22,7 +22,7 @@ GWLdata = importdata('LON2011-2018-V3-1-GWL.obs');
 time_GWL = datenum(GWLdata.data(:,1) + 693960);
 GWL = timeseries(GWLdata.data(:,2),time_GWL);
 
-porosity = 0.20;
+porosity = 0.2;
 
 % load CRHM results
 
@@ -41,6 +41,7 @@ model_tests = model_tests_all(model_tests_2plot,:);
 crhm_col_QSurf = 3; % col including time
 crhm_col_QSTile = 17;% % col including time
 crhm_col_GWL = 4; %% col including time
+crhm_col_evap = 9;
 
 % -------------------------------------------------------------
 
@@ -57,6 +58,7 @@ for i=1:numel(model_tests(:,1))
     QSurf_crhm_i = timeseries(CRHMdata_model.data(:,crhm_col_QSurf),time_chrm);
     QTile_crhm_i = timeseries(CRHMdata_model.data(:,crhm_col_QSTile),time_chrm);
     GWL_crhm_i = timeseries(CRHMdata_model.data(:,crhm_col_GWL),time_chrm);
+    crhm_hru_actet_i = timeseries(CRHMdata_model.data(:,crhm_col_evap),time_chrm);
   
     plot(QSurf_crhm_i,'k')
     ax1 = gcf;
@@ -139,7 +141,7 @@ figure
 %subplot(311)
 plot(GWL,'r.')
 hold on
-GWL_crhm_i_conv_to_m = GWL_crhm_i / porosity / 1000 - (2.25-1.5); % well checked and correct (Mazda and Diogo)
+GWL_crhm_i_conv_to_m = GWL_crhm_i / porosity / 1000 - (2.250-1.5); % well checked and correct (Mazda and Diogo)
 plot(GWL_crhm_i_conv_to_m,'k')
 %hold on
 % plot(GWL_crhm_2,'g:')
@@ -157,7 +159,31 @@ title('GW level (m)')
 % ylabel('[m]')
 % title('GW level (m)')
 
-
+figure;
+subplot(131)
+plot(cumsum(precip.Data))
+hold on
+plot(cumsum(QTile_crhm_i.Data))
+hold on
+plot(cumsum(crhm_hru_actet_i.Data))
+hold on; 
+plot(cumsum(QSurf_crhm_i.Data))
+legend('precip','QTile_crhm_i','crhm_hru_actet_i','QSurf_crhm_i')
+grid on
+subplot(132)
+plot(cumsum(QTile_crhm_i.Data))
+hold on
+plot(cumsum(QTile.Data))
+title('Tile flow')
+legend('model','obs')
+grid on
+subplot(133)
+plot(cumsum(QSurf_crhm_i.Data))
+hold on
+plot(cumsum(QSurf.Data))
+grid on
+title('Surface runoff')
+legend('model','obs')
 
 % Peformence Calculator (Nash, RMSE, Bias)
 function [Nash,RMSE,Bias,dataUse,CHRMout_data_interp] = PerformenceCalculator(CRHM_time,CRHMout_data_var,time,data)
