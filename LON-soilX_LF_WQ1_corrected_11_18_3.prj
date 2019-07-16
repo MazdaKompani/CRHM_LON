@@ -1,5 +1,5 @@
 Description - to be added
-###### Version: CRHM 06/03/19B  Creation: 7/12/2019 11:21
+###### Version: CRHM 06/03/19B  Creation: 7/15/2019 10:12
 Dimensions:
 ######
 nhru 1
@@ -66,10 +66,10 @@ Macros:
 '/////Sd[hh]=Sd[hh]-Sdexcess[hh]'
 '// Tile module starts here ---------------------------------'
 '//change the units of soil_gw_K from mm/d to Ksatu in mm/h'
-'Ksatu=25.4 // mm/h -> taken from Ayres based on the groundcover of 5 and texture of 1'
+'Ksatu=3.8 // mm/h -> taken from Ayres based on the groundcover of 5 and texture of 1'
 '//Ksatu=soil_gw_K/24.0'
-'Poro_soil=0.20 // [-]'
-'Dimpbt=1250 // mm -> elevation of the tile from the bedrock'
+'Poro_soil=0.01 // [-]'
+'Dimpbt=2000 // mm -> elevation of the tile from the bedrock'
 'tilspc=14000 // mm -> spacing between tiles'
 '//if the water level in soil is higher than the tile level'
 'if((soil_moist[hh]/Poro_soil)>Dimpbt)'
@@ -84,11 +84,12 @@ Macros:
 '//		soil_rechr[hh]=soil_rechr[hh]-tile_flow[hh]'
 '//	endif'
 'endif'
-'soil_moist[hh]=soil_moist[hh]-0.0'
-'soil_rechr[hh]=soil_rechr[hh]-0.0'
+'//the flow from soil to groundwater'
+'soil_moist[hh]=soil_moist[hh]-0.01'
+'soil_rechr[hh]=soil_rechr[hh]-0.01'
 '//excess water flow out from the soil and add to groundwater''
-'gw[hh]=gw[hh]+(0.0)'
-'soil_WL[hh]=soil_moist[hh]/(Poro_soil*1000)'
+'gw[hh]=gw[hh]+(0.01)'
+'soil_WL[hh]=soil_moist[hh]/(Poro_soil*1000)-1.5'
 'if(QTile[hh]>0 && QSurf[hh]>0)'
 '//total_flow_obs[hh]=QTile[hh]+QSurf[hh]'
 'endif'
@@ -156,7 +157,7 @@ Shared hru_lat <-90 to 90>
 Shared Ht <0.001 to 100>
 0.1 
 Shared inhibit_evap <0 to 1>
-1 
+0 
 Shared rain_conc <0 to 1000>
 0 
 0 
@@ -166,15 +167,15 @@ Shared rain_conc <0 to 1000>
 Shared Sdmax <0 to 1000>
 25 
 Shared soil_rechr_max <0 to 350>
-71 
+3.35 
 albedo Albedo_bare <0 to 1>
 0.17 
 albedo Albedo_snow <0 to 1>
 0.85 
 Ayers groundcover <1 to 6>
-5 
+4 
 Ayers texture <1 to 4>
-1 
+3 
 basin basin_name
 'Basin' 
 basin hru_names
@@ -525,20 +526,20 @@ WQ_Soil Sd_gw_K <0 to 100>
 WQ_Soil Sd_ssr_K <0 to 100>
 0 
 WQ_Soil soil_gw_K <0 to 100>
-0 
+100 
 WQ_Soil soil_moist_init <0 to 5000>
-225 
+15 
 WQ_Soil soil_moist_max <0 to 5000>
-450 
+30 
 WQ_Soil soil_rechr_init <0 to 250>
-35 
+1.55 
 WQ_Soil soil_ssr_runoff <0 to 1>
 1 
 WQ_Soil soil_withdrawal <1 to 4>
 3 
 3 
 WQ_Soil transp_limited <0 to 1>
-0 
+1 
 WQ_Soil unmixed_surface_layer <0 to 1000>
 10 
 ######
@@ -574,6 +575,7 @@ Unit_Adjus_and_tile_module outflow_m 1
 Unit_Adjus_and_tile_module runoutflow_m 1
 WQ_Soil Sd 1
 Unit_Adjus_and_tile_module tile_flow 1
+Unit_Adjus_and_tile_module soil_WL 1
 ######
 Display_Observation:
 ######

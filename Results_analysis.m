@@ -22,7 +22,7 @@ GWLdata = importdata('LON2011-2018-V3-1-GWL.obs');
 time_GWL = datenum(GWLdata.data(:,1) + 693960);
 GWL = timeseries(GWLdata.data(:,2),time_GWL);
 
-porosity = 0.2;
+porosity = 0.01;
 
 % load CRHM results
 
@@ -109,10 +109,41 @@ for i=1:numel(model_tests(:,1))
      
      
      figure;
+     
      scatter(dataUse,CHRMout_data_interp)
+     title('Surface flow (mm/h)')
      
 end
 
+%plotting time series of observed and simulated surface flow _______
+
+figure
+plot(QSurf.Time,QSurf.Data,'ro','Markersize',2)
+hold on
+% %plot(QSurf_crhm_1,'k')
+% hold on
+% %plot(QSurf_crhm_2,'g:')
+% hold on
+plot(QSurf_crhm_i,'k','Markersize',2)
+datetick('x','mmm-yyyy')
+grid on
+ylabel('[mm/h]')
+title('Surface flow (mm/h)')
+
+% Performence calculation
+     [NashS,RMSES,BiasS,dataUseS,CHRMout_data_interpS] = PerformenceCalculator(QSurf_crhm_i.Time,QSurf_crhm_i.Data,...
+         QSurf.Time,QSurf.Data);
+     PerfTextS = {'Performence:',...
+                ['NSE =', num2str(NashS)],...
+                ['RMSE =', num2str(RMSES)],...
+                ['Bias =', num2str(BiasS)]};
+     dimS = [.2 .5 .3 .3];
+     annotation('textbox',dimS,'String',PerfTextS,'FitBoxToText','on','backgroundColor','w');
+    
+
+
+
+%plotting time series of observed and simulated TILE flow _______
 %legend('Obs','Model_1','Model_2','Model_3')
 
 figure
@@ -127,6 +158,17 @@ datetick('x','mmm-yyyy')
 grid on
 ylabel('[mm/h]')
 title('Tile flow (mm/h)')
+% Performence calculation
+     [NashT,RMSET,BiasT,dataUseT,CHRMout_data_interpT] = PerformenceCalculator(QTile_crhm_i.Time,QTile_crhm_i.Data,...
+         QTile.Time,QTile.Data);
+     PerfTextT = {'Performence:',...
+                ['NSE =', num2str(NashT)],...
+                ['RMSE =', num2str(RMSET)],...
+                ['Bias =', num2str(BiasT)]};
+     dimT = [.2 .5 .3 .3];
+     annotation('textbox',dimT,'String',PerfTextT,'FitBoxToText','on','backgroundColor','w');
+    
+
 % legend('Obs',... %'Model_1','Model_2',.. 
 % 'Model_3')
 % 
@@ -141,7 +183,7 @@ figure
 %subplot(311)
 plot(GWL,'r.')
 hold on
-GWL_crhm_i_conv_to_m = GWL_crhm_i / porosity / 1000 - (2.250-1.5); % well checked and correct (Mazda and Diogo)
+GWL_crhm_i_conv_to_m = GWL_crhm_i / porosity / 1000 - (3-1.5); % well checked and correct (Mazda and Diogo)
 plot(GWL_crhm_i_conv_to_m,'k')
 %hold on
 % plot(GWL_crhm_2,'g:')
@@ -151,6 +193,17 @@ datetick('x','mmm-yyyy')
 grid on
 ylabel('[m]')
 title('GW level (m)')
+
+% Performence calculation
+     [NashG,RMSEG,BiasG,dataUseG,CHRMout_data_interpG] = PerformenceCalculator(GWL_crhm_i.Time,GWL_crhm_i_conv_to_m.Data,...
+         GWL.Time,GWL.Data);
+     PerfTextG = {'Performence:',...
+                ['NSE =', num2str(NashG)],...
+                ['RMSE =', num2str(RMSEG)],...
+                ['Bias =', num2str(BiasG)]};
+     dimG = [.2 .5 .3 .3];
+     annotation('textbox',dimG,'String',PerfTextG,'FitBoxToText','on','backgroundColor','w');
+
 % legend('Obs','Model_1','Model_2','Model_3')
 % 
 % plot(GWL,'r.')
@@ -185,6 +238,19 @@ grid on
 title('Surface runoff')
 legend('model','obs')
 
+
+% Total Performence calculation
+     [NashTo,RMSETo,BiasTo,dataUseTo,CHRMout_data_interpTo] = PerformenceCalculatorTo(QSurf_crhm_i.Time,QSurf_crhm_i.Data,...
+         QSurf.Time,QSurf.Data,QTile_crhm_i.Time,QTile_crhm_i.Data,QTile.Time,QTile.Data,GWL_crhm_i.Time,...
+         GWL_crhm_i_conv_to_m.Data,GWL.Time,GWL.Data);
+     PerfTextTo = {'Performence:',...
+                ['NSE =', num2str(NashTo)],...
+                ['RMSE =', num2str(RMSETo)],...
+                ['Bias =', num2str(BiasTo)]};
+     dimTo = [.2 .5 .3 .3];
+     annotation('textbox',dimTo,'String',PerfTextTo,'FitBoxToText','on','backgroundColor','w');
+
+
 % Peformence Calculator (Nash, RMSE, Bias)
 function [Nash,RMSE,Bias,dataUse,CHRMout_data_interp] = PerformenceCalculator(CRHM_time,CRHMout_data_var,time,data)
 
@@ -209,5 +275,82 @@ RMSE=(numerator/n)^(1/2);
 numerator = sum(dataUse);
 denominator = sum(CHRMout_data_interp);
 Bias = numerator/denominator-1;
+
+end
+
+% Peformence Calculator (Nash, RMSE, Bias) for tile, surface flows and GWL
+function [NashTo,RMSETo,BiasTo,dataUseTo_No,CHRMout_data_interpTo_No] = PerformenceCalculatorTo(CRHM_timeS,CRHMout_data_varS,...
+    timeS,dataS,CRHM_timeT,CRHMout_data_varT,timeT,dataT,CRHM_timeG,CRHMout_data_varG,timeG,dataG)
+
+CHRMout_data_interpS = interp1(datenum(CRHM_timeS),CRHMout_data_varS,datenum(timeS));
+% remove NaNs
+isnanLocS = isnan(CHRMout_data_interpS);
+CHRMout_data_interpS(isnanLocS) = [];
+dataUseS = dataS;
+dataUseS(isnanLocS) = [];
+
+CHRMout_data_interpS_No=normalize(CHRMout_data_interpS)
+dataUseS_No=normalize(dataUseS)
+dataS_No=normalize(dataS)
+NumS=numel(dataUseS_No)
+
+
+
+CHRMout_data_interpT = interp1(datenum(CRHM_timeT),CRHMout_data_varT,datenum(timeT));
+% remove NaNs
+isnanLocT = isnan(CHRMout_data_interpT);
+CHRMout_data_interpT(isnanLocT) = [];
+dataUseT = dataT;
+dataUseT(isnanLocT) = [];
+
+CHRMout_data_interpT_No=normalize(CHRMout_data_interpT)
+dataUseT_No=normalize(dataUseT)
+dataT_No=normalize(dataT)
+NumT=numel(dataUseT_No)
+
+
+CHRMout_data_interpG = interp1(datenum(CRHM_timeG),CRHMout_data_varG,datenum(timeG));
+% remove NaNs
+isnanLocG = isnan(CHRMout_data_interpG);
+CHRMout_data_interpG(isnanLocG) = [];
+dataUseG = dataG;
+dataUseG(isnanLocG) = [];
+
+CHRMout_data_interpG_No=normalize(CHRMout_data_interpG)
+dataUseG_No=normalize(dataUseG)
+dataG_No=normalize(dataG)
+NumG=numel(dataUseG_No)
+
+
+CHRMout_data_interpTo_No(1:NumS)=CHRMout_data_interpS_No(1:NumS)
+dataUseTo_No(1:NumS)=dataUseS_No(1:NumS)
+dataTo_No(1:NumS)=dataS_No(1:NumS)
+
+CHRMout_data_interpTo_No(NumS+1:NumS+NumT)=CHRMout_data_interpT_No(1:NumT)
+dataUseTo_No(NumS+1:NumS+NumT)=dataUseT_No(1:NumT)
+dataTo_No(NumS+1:NumS+NumT)=dataT_No(1:NumT)
+
+CHRMout_data_interpTo_No(NumS+NumT+1:NumS+NumT+NumG)=CHRMout_data_interpG_No(1:NumG)
+dataUseTo_No(NumS+NumT+1:NumS+NumT+NumG)=dataUseG_No(1:NumG)
+dataTo_No(NumS+NumT+1:NumS+NumT+NumG)=dataG_No(1:NumG)
+
+
+
+
+
+% Calculate Performence
+% Nash
+numeratorTo_No=(dataUseTo_No-CHRMout_data_interpTo_No).^2;
+denominatorTo_No=(dataTo_No-mean(dataTo_No)).^2;
+NashTo =1-(sum(numeratorTo_No)/sum(denominatorTo_No));
+% RMSE
+SumcalTo_No = (CHRMout_data_interpTo_No-dataUseTo_No).^2;
+numeratorTo_No = sum(SumcalTo_No);
+nTo_No=numel(dataUseTo_No);
+RMSETo=(numeratorTo_No/nTo_No)^(1/2);
+% Bias
+numeratorTo_No = sum(dataUseTo_No);
+denominatorTo_No = sum(CHRMout_data_interpTo_No);
+BiasTo = numeratorTo_No/denominatorTo_No-1;
 
 end
