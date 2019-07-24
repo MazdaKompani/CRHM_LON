@@ -147,7 +147,7 @@ title('Surface flow (mm/h)')
 %legend('Obs','Model_1','Model_2','Model_3')
 
 figure
-plot(QTile.Time,QTile.Data,'ro')
+plot(QTile.Time,QTile.Data,'ro','Markersize',2)
 hold on
 % %plot(QSurf_crhm_1,'k')
 % hold on
