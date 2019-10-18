@@ -23,7 +23,7 @@ GWLdata = importdata('LON2011-2018-V3-1-GWL.obs');
 time_GWL = datenum(GWLdata.data(:,1) + 693960);
 GWL = timeseries(GWLdata.data(:,2),time_GWL);
 
-porosity = 0.01;
+porosity = 0.0333;
 
 % load CRHM results
 
